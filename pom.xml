@@ -16,6 +16,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>hwwebapp</finalName>
+      <finalName>hwwebapp</finalName>
+      <directory>webapps</directory>
   </build>
 </project>
