@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @EnableAutoConfiguration
 public class Trial {
-    @RequestMapping("/")
+    @RequestMapping("/zumm")
     @ResponseBody
     String home(){
         return "I'm in your applicatioun";
