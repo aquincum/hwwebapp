@@ -33,7 +33,9 @@ public class Trial {
         Connection conn = null;
         Statement statement = null;
         ResultSet resultSet = null;
-        String connString = "jdbc:sqlserver://dsz-hw.database.windows.net:1433;database=hw-db;user=tester2@dsz-hw;password=testing12345!;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+        String username = System.getenv("SQLAZURECONNSTR_username");
+        String password = System.getenv("SQLAZURECONNSTR_password");
+        String connString = String.format("jdbc:sqlserver://dsz-hw.database.windows.net:1433;database=hw-db;user=%s@dsz-hw;password=%2;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", username, password);
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
             conn = DriverManager.getConnection(connString);
@@ -43,7 +45,9 @@ public class Trial {
             StringBuilder sb = new StringBuilder();
             while(resultSet.next()){
                 sb.append(resultSet.getString(1));
+                sb.append(", ");
             }
+            sb.append(String.format("\nUsername: %s", username));
             return sb.toString();
         }
         catch (Exception e){
