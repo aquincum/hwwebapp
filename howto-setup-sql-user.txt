@@ -1,0 +1,18 @@
+use master;
+create login tester2 with password='testing12345!'
+CREATE USER tester2 FOR LOGIN tester2 WITH DEFAULT_SCHEMA=[dbo]
+
+
+use dbo;
+CREATE USER tester2 FOR LOGIN tester2 WITH DEFAULT_SCHEMA=[dbo]
+GO
+
+
+EXEC sp_addrolemember 'db_datareader', 'tester2';
+GO
+
+EXEC sp_addrolemember 'db_datawriter', 'tester2';
+GO
+
+GRANT EXECUTE ON SCHEMA :: dbo TO tester2;
+GO

@@ -3,11 +3,13 @@ package hu.szeredi.daniel.hwwebapp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.sql.*;
+
+import com.microsoft.sqlserver.jdbc.*;
 
 @Controller
 @EnableAutoConfiguration
@@ -25,7 +27,46 @@ public class Trial {
         return "Isadasdasdas'm in your applicatioun";
     }
 
+    @RequestMapping("/tables")
+    @ResponseBody
+    String getTables(){
+        Connection conn = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        String connString = "jdbc:sqlserver://dsz-hw.database.windows.net:1433;database=hw-db;user=tester2@dsz-hw;password=testing12345!;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+            conn = DriverManager.getConnection(connString);
+            String selectSql = "SELECT name FROM sys.tables";
+            statement = conn.createStatement();
+            resultSet = statement.executeQuery(selectSql);
+            StringBuilder sb = new StringBuilder();
+            while(resultSet.next()){
+                sb.append(resultSet.getString(1));
+            }
+            return sb.toString();
+        }
+        catch (Exception e){
+            return String.format("Error occured wondrously! %s", e.toString());
+        }
+        finally {
+            if (resultSet != null) try { resultSet.close(); } catch(Exception e) {}
+            if (statement != null) try { statement.close(); } catch(Exception e) {}
+            if(conn != null){
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // OJJOJOJ
+                }
+            }
+        }
+    }
 
+    @RequestMapping("/test")
+    @ResponseBody
+    String testme() {
+        return "asdfasdf";
+    }
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Trial.class, args);
